@@ -6,7 +6,7 @@
 /*   By: anadal-g <anadal-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 11:39:00 by anadal-g          #+#    #+#             */
-/*   Updated: 2024/02/19 12:15:30 by anadal-g         ###   ########.fr       */
+/*   Updated: 2024/03/12 12:44:29 by anadal-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,27 @@
 int	main(int argc, char **argv, char **envp)
 {
 	int		fd[2];
-	pid_t	pid;
+	pid_t	pid[2];
+	int		status;
 
 	if (argc != 5)
 		perror_error("Numero de argumentos incorrectos");
-	pid = fork();
-	if (pid == -1) // Error no se esta ejecutando nada
-	{
+	if (pipe(fd))
+		perror_error("pipe error");
+	pid[0] = fork();
+	if (pid[0] == -1) // Error no se esta ejecutando nada
 		perror_error("fork error");
-	}
-	else if (pid == 0) // se esta ejecutando el hijo
-	{
+	else if (pid[0] == 0) // se esta ejecutando el hijo
 		child(argv, envp, fd);
-	}
-	else if (pid > 0) // se esta ejecutando el padre
-	{
+	/* Ejecutamos el padre */
+	pid[1] = fork();
+	if (pid[1] < 0)
+		perror_error("fork error");
+	else if (pid[1] == 0)
 		parent(argv, envp, fd);
-	}
-	return (0);
+	close(fd[0]);
+	close(fd[1]);
+	waitpid(pid[0], NULL, 0);
+	waitpid(pid[1], &status, 0);
+	return (WEXITSTATUS(status));
 }

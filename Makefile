@@ -6,7 +6,7 @@
 #    By: anadal-g <anadal-g@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/22 16:08:43 by anadal-g          #+#    #+#              #
-#    Updated: 2024/02/20 12:16:45 by anadal-g         ###   ########.fr        #
+#    Updated: 2024/03/11 14:47:41 by anadal-g         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ OBJ_DIR		= objs/
 OBJ_FILES 	= $(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 
 #COMPILER
-CC		= gcc -g -O3 -fsanitize=address
+CC		= gcc #-g -O3 -fsanitize=address
 FLAGS	= -Wall -Wextra -Werror
 INCLUDE = -I includes
 RM		= rm -rf
