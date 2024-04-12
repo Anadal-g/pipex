@@ -6,7 +6,7 @@
 /*   By: anadal-g <anadal-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 15:15:36 by anadal-g          #+#    #+#             */
-/*   Updated: 2024/03/12 12:45:07 by anadal-g         ###   ########.fr       */
+/*   Updated: 2024/04/12 11:27:59 by anadal-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ char	*find_path(char *command, char **envp)
 	{
 		part_path = ft_strjoin(paths[i], "/");
 		path = ft_strjoin(part_path, command);
+		free(part_path);
 		if (access(path, F_OK) == 0)
 			return (path);
 		i++;
