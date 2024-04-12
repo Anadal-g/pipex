@@ -6,7 +6,7 @@
 #    By: anadal-g <anadal-g@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/22 16:08:43 by anadal-g          #+#    #+#              #
-#    Updated: 2024/03/11 14:47:41 by anadal-g         ###   ########.fr        #
+#    Updated: 2024/04/12 16:03:55 by anadal-g         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,9 @@ SRC_FILES =	main.c \
 			errors.c \
 			child_parent.c \
 			check_path.c \
+
+SRC_BONUS = main_bonus.c \
+			check_path_bonus.c \
 	
 SRC			=	$(addprefix $(SRC_DIR), $(SRC_FILES))
 
@@ -58,13 +61,19 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 clean:
 	@echo "$(BLUE)Removing compiled files.$(CLEAR)"
 	$(RM) $(OBJ_DIR)
+	@make -C libft/ clean
 	@echo "$(BLUE)Object files removed correctly\n$(CLEAR)"
 
 fclean: clean
 	@echo "$(BLUE)Removing exec. files.$(CLEAR)"
 	$(RM) $(NAME)
+	@make -C libft/ fclean
 	@echo "$(BLUE)Object files and binary removed correctly\n$(CLEAR)"
 
 re: fclean all
+
+bonus : clean
+	make all -C libft
+	gcc $(CFLAGS) $(SRCS_BONUS) -o $(NAME)
 
 .PHONY: all clean fclean re  

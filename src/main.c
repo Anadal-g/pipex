@@ -6,7 +6,7 @@
 /*   By: anadal-g <anadal-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 11:39:00 by anadal-g          #+#    #+#             */
-/*   Updated: 2024/03/12 12:44:29 by anadal-g         ###   ########.fr       */
+/*   Updated: 2024/04/12 11:37:43 by anadal-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc != 5)
 		perror_error("Numero de argumentos incorrectos");
-	if (pipe(fd))
+	if (pipe(fd) == -1)
 		perror_error("pipe error");
 	pid[0] = fork();
 	if (pid[0] == -1) // Error no se esta ejecutando nada
