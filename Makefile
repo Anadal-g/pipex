@@ -6,7 +6,7 @@
 #    By: anadal-g <anadal-g@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/22 16:08:43 by anadal-g          #+#    #+#              #
-#    Updated: 2024/04/12 16:03:55 by anadal-g         ###   ########.fr        #
+#    Updated: 2024/04/22 12:14:46 by anadal-g         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,8 @@ SRC_FILES =	main.c \
 
 SRC_BONUS = main_bonus.c \
 			check_path_bonus.c \
+			errors_bonus.c \
+			child_parent_bonus.c \
 	
 SRC			=	$(addprefix $(SRC_DIR), $(SRC_FILES))
 
@@ -73,7 +75,7 @@ fclean: clean
 re: fclean all
 
 bonus : clean
-	make all -C libft
+	@make all -sC libft
 	gcc $(CFLAGS) $(SRCS_BONUS) -o $(NAME)
 
 .PHONY: all clean fclean re  

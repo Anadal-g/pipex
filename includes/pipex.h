@@ -6,7 +6,7 @@
 /*   By: anadal-g <anadal-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:09:16 by anadal-g          #+#    #+#             */
-/*   Updated: 2024/03/12 11:03:01 by anadal-g         ###   ########.fr       */
+/*   Updated: 2024/04/15 12:53:25 by anadal-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,8 @@ int		open_file(char *argv, int x);
 void	ft_execve(char *argv, char **envp);
 char	*find_path(char *command, char **envp);
 int		check_envp(char **envp);
+
+//bonus
+void	do_pipe(char *command, char **envp);
 
 #endif

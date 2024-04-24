@@ -6,15 +6,33 @@
 /*   By: anadal-g <anadal-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 11:40:15 by anadal-g          #+#    #+#             */
-/*   Updated: 2024/04/12 17:29:32 by anadal-g         ###   ########.fr       */
+/*   Updated: 2024/04/24 11:56:58 by anadal-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-void	here_doc(char **argv)
+void	do_pipe(char *command, char **envp)
 {
+	pid_t	pid;
+	int		fd[2];
 	
+	if (pipe(fd) == -1)
+		perror_error("pipe error");
+	pid = fork();
+	if (pid == -1)
+		perror_error("pipe error");
+	if(!pid)
+	{
+		close(fd[0]);
+		dup2(fd[1], 1);
+		ft_execve(command, envp);
+	}
+	else
+	{
+		close(fd[1]);
+		dup2(fd[0], 0);
+	}
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -55,7 +73,9 @@ int	main(int argc, char **argv, char **envp)
 	}
 	while (i < argc - 2)
 	{
-		/* code */
+		do_pipe(argv[i], envp);
+		i++;
 	}
-	
+	dup2(fd_out, 1);
+	ft_execve(argv[argc - 2], envp);
 }
