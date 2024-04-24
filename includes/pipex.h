@@ -6,7 +6,7 @@
 /*   By: anadal-g <anadal-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:09:16 by anadal-g          #+#    #+#             */
-/*   Updated: 2024/04/15 12:53:25 by anadal-g         ###   ########.fr       */
+/*   Updated: 2024/04/24 12:39:54 by anadal-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,8 @@ int		check_envp(char **envp);
 
 //bonus
 void	do_pipe(char *command, char **envp);
+
+/* Here_doc */
+void	here_doc(char **argv);
 
 #endif

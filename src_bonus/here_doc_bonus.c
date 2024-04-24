@@ -6,13 +6,13 @@
 /*   By: anadal-g <anadal-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 11:56:34 by anadal-g          #+#    #+#             */
-/*   Updated: 2024/04/24 12:25:06 by anadal-g         ###   ########.fr       */
+/*   Updated: 2024/04/24 12:42:43 by anadal-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-here_doc_2(char **argv, int *fd)
+void	here_doc_2(char **argv, int *fd)
 {
 	char	*ret;
 	close(fd[0]);
@@ -47,5 +47,5 @@ void	here_doc(char **argv)
 		dup2(fd[0], 0);
 		//El proceso padre espera hasta que termina el proceso hijo
 		wait(NULL);
-	}	
+	}
 }
