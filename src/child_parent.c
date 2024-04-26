@@ -6,7 +6,7 @@
 /*   By: anadal-g <anadal-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 15:14:41 by anadal-g          #+#    #+#             */
-/*   Updated: 2024/04/22 12:12:19 by anadal-g         ###   ########.fr       */
+/*   Updated: 2024/04/25 21:04:06 by anadal-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	open_file(char *argv, int x)
 	- Output: pipe	 --> fd[1]
 
 	fd[0] = lectura
-	fd[1] = esritura
+	fd[1] = escritura
 */
 void	child(char *argv[], char **envp, int *fd)
 {

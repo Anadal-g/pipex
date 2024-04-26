@@ -6,7 +6,7 @@
 /*   By: anadal-g <anadal-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 11:56:34 by anadal-g          #+#    #+#             */
-/*   Updated: 2024/04/24 12:42:43 by anadal-g         ###   ########.fr       */
+/*   Updated: 2024/04/25 12:56:44 by anadal-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,20 @@
 void	here_doc_2(char **argv, int *fd)
 {
 	char	*ret;
+	char	*delimitier;
+
+	delimitier = ft_strjoin(argv[2], "\n");
 	close(fd[0]);
 	while (1)
 	{
 		ret = get_next_line(0);
-		if (ft_strncmp(ret, argv[2], ft_strlen(argv[2])) == 0)
+		if (ft_strncmp(ret, delimitier, ft_strlen(ret)) == 0) {
+			free(delimitier);
 			exit(0);
+		}
 		ft_putstr_fd(ret, fd[1]);
 		free(ret);
 	}
-	
 }
 
 void	here_doc(char **argv)
