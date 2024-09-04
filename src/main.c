@@ -6,7 +6,7 @@
 /*   By: anadal-g <anadal-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 11:39:00 by anadal-g          #+#    #+#             */
-/*   Updated: 2024/04/12 11:37:43 by anadal-g         ###   ########.fr       */
+/*   Updated: 2024/09/04 13:56:26 by anadal-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,14 @@ int	main(int argc, char **argv, char **envp)
 	int		status;
 
 	if (argc != 5)
-		perror_error("Numero de argumentos incorrectos");
+		perror_error("Number of incorrect arguments");
 	if (pipe(fd) == -1)
 		perror_error("pipe error");
 	pid[0] = fork();
-	if (pid[0] == -1) // Error no se esta ejecutando nada
+	if (pid[0] == -1)
 		perror_error("fork error");
-	else if (pid[0] == 0) // se esta ejecutando el hijo
+	else if (pid[0] == 0)
 		child(argv, envp, fd);
-	/* Ejecutamos el padre */
 	pid[1] = fork();
 	if (pid[1] < 0)
 		perror_error("fork error");

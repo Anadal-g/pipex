@@ -6,11 +6,21 @@
 /*   By: anadal-g <anadal-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 15:15:36 by anadal-g          #+#    #+#             */
-/*   Updated: 2024/04/22 12:26:59 by anadal-g         ###   ########.fr       */
+/*   Updated: 2024/09/04 13:55:36 by anadal-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
+
+void	free_matrix(char **matrix)
+{
+	int	i;
+
+	i = -1;
+	while (matrix[++i])
+		free(matrix[i]);
+	free(matrix);
+}
 
 // Esta funcion comprueba si se ha quitado el envp de la ruta
 int	check_envp(char **envp)

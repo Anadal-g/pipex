@@ -6,7 +6,7 @@
 #    By: anadal-g <anadal-g@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/22 16:08:43 by anadal-g          #+#    #+#              #
-#    Updated: 2024/04/24 12:35:20 by anadal-g         ###   ########.fr        #
+#    Updated: 2024/09/04 12:42:28 by anadal-g         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,11 +37,11 @@ OBJ_FILES 	= $(SRC:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 OBJ_BONUS_FILES = $(SRC_BONUS:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
 
 #COMPILER
-CC		= gcc #-g -O3 -fsanitize=address
+CC		= cc #-g -O3 -fsanitize=address
 FLAGS	= -Wall -Wextra -Werror
 INCLUDE = -I includes
 RM		= rm -rf
-LIBFT = libft/libft.a
+LIBFT 	= libft/libft.a
 
 # COLORS
 RED		=	\033[91;1m
@@ -52,21 +52,22 @@ PINK	=	\033[95;1m
 CLEAR	=	\033[0m
 
 #MAKEFILE RULES
-all: $(NAME)
-
-$(NAME) : $(OBJ_FILES)
-	@make -sC libft
-	@echo "$(GREEN)Compiling the PIPEX program.$(CLEAR)"
-	$(CC) $(FLAGS) $(INCLUDE) $(LIBFT) $(OBJ_FILES) -o $(NAME)
-	@echo "$(GREEN)[OK]\n$(CLEAR)$(GREEN)Success!$(CLEAR)\n"
-	
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c
 	@mkdir -p $(OBJ_DIR)
 	$(CC) $(FLAGS) -c $< -o $@
 
+
 $(OBJ_DIR)%.o: $(SRC_BONUS_DIR)%.c
 	@mkdir -p $(OBJ_DIR)
 	$(CC) $(FLAGS) -c $< -o $@
+
+all: $(NAME)
+
+$(NAME) : $(OBJ_FILES)
+	@make -C libft
+	@echo "$(GREEN)Compiling the PIPEX program.$(CLEAR)"
+	$(CC) $(FLAGS) $(OBJ_FILES) -o $(NAME) $(INCLUDE) -Llibft -lft
+	@echo "$(GREEN)[OK]\n$(CLEAR)$(GREEN)Success!$(CLEAR)\n"
 	
 clean:
 	@echo "$(BLUE)Removing compiled files.$(CLEAR)"
@@ -85,7 +86,7 @@ re: fclean all
 bonus : $(OBJ_BONUS_FILES)
 	@make all -sC libft
 	@echo "$(GREEN)Compiling the PIPEX BONUS program.$(CLEAR)"
-	$(CC) $(FLAGS) $(INCLUDE) $(LIBFT) $(OBJ_BONUS_FILES) -o $(NAME)
+	$(CC) $(FLAGS) $(OBJ_BONUS_FILES) -o $(NAME) $(INCLUDE) -Llibft -lft
 	@echo "$(GREEN)[OK]\n$(CLEAR)$(GREEN)Success!$(CLEAR)\n"
 
 .PHONY: all clean fclean re  
