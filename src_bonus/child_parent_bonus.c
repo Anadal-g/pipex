@@ -6,7 +6,7 @@
 /*   By: anadal-g <anadal-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 16:35:49 by anadal-g          #+#    #+#             */
-/*   Updated: 2024/09/04 17:26:25 by anadal-g         ###   ########.fr       */
+/*   Updated: 2024/09/09 16:29:04 by anadal-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 // 		dup2(fd2[1], STDOUT_FILENO);
 // 		close(fd[1]);
 // 		close(fd2[0]);
-// 		close(fd2[1]);		
+// 		close(fd2[1]);
 // }
 
 // // Esta funcion abre el arhivo y devuelve el fd
@@ -59,7 +59,7 @@
 // 		infile = open_file_bonus(argv, 0);
 // 		i += 2;
 // 	}
-// 	else 
+// 	else
 // 		infile = open_file_bonus(&argv[i++], O_RDONLY);
 // 	if (!infile)
 // 		perror_error("Outfile error");
@@ -87,7 +87,7 @@
 // 	{
 // 		if (ft_strcmp(argv[1], "here_doc") == 0)
 // 			outfile = open_file_bonus(argv, 2);
-// 		else 
+// 		else
 // 			outfile = open_file_bonus(argv, 1);
 // 		dup2(fd[0], STDIN_FILENO);
 // 		dup2(outfile, STDOUT_FILENO);
@@ -126,124 +126,109 @@
 // 	}
 // 	parent_bonus(argv, envp, pid, fd);
 // }
-void other_childs(int *fd, int *fd2)
+void	other_childs(int *fd, int *fd2)
 {
-    // Redirige stdin a fd[READ_FD] y stdout a fd2[WRITE_FD]
-    dup2(fd[0], STDIN_FILENO);
-    close(fd[0]); // Cerramos después de duplicar
-    close(fd[1]); // Cerramos el extremo opuesto que no se utiliza
-
-    dup2(fd2[1], STDOUT_FILENO);
-    close(fd2[1]); // Cerramos después de duplicar
-    close(fd2[0]); // Cerramos el extremo opuesto que no se utiliza
+	// Redirige stdin a fd[READ_FD] y stdout a fd2[WRITE_FD]
+	dup2(fd[0], STDIN_FILENO);
+	close(fd[0]); // Cerramos después de duplicar
+	close(fd[1]); // Cerramos el extremo opuesto que no se utiliza
+	dup2(fd2[1], STDOUT_FILENO);
+	close(fd2[1]); // Cerramos después de duplicar
+	close(fd2[0]); // Cerramos el extremo opuesto que no se utiliza
 }
 
-void connect_next_cmd(int *fd, int *fd2)
+void	connect_next_cmd(int *fd, int *fd2)
 {
-    // Cierra la lectura del anterior y la escritura del nuevo pipe
-    close(fd[0]);
-    close(fd2[1]);
-    // Reasigna la lectura del nuevo pipe al anterior
-    fd[0] = fd2[0];
+	// Cierra la lectura del anterior y la escritura del nuevo pipe
+	close(fd[0]);
+	close(fd2[1]);
+	// Reasigna la lectura del nuevo pipe al anterior
+	fd[0] = fd2[0];
 	fd[1] = fd2[1];
 }
 
-void first_child(char **arguments, char **enviroment, int *fd)
+void	first_child(char **arguments, char **enviroment, int *fd)
 {
-    int infile;
-    int i;
+	int	infile;
+	int	i;
 
-    i = 1;
-    if (ft_strcmp(arguments[1], "here_doc") == 0)
-    {
-        infile = open("TMP_FILE", O_RDONLY);  // Asume que TMP_FILE es el archivo temporal de here_doc
-        i += 2;
-    }
-    else
-    {
-        infile = open(arguments[i++], O_RDONLY);
-    }
-    if (infile == -1)
-        perror_error("Error al abrir el archivo de entrada");
-    
-    dup2(infile, STDIN_FILENO);
-    close(infile);
-	
-    dup2(fd[1], STDOUT_FILENO);
-    close(fd[1]);
-    close(fd[0]);
-    ft_execve(arguments[i], enviroment);  // Ejecuta el primer comando
+	i = 1;
+	if (ft_strcmp(arguments[1], "here_doc") == 0)
+	{
+		infile = open("TMP_FILE", O_RDONLY);
+		i += 2;
+	}
+	else
+	{
+		infile = open(arguments[i++], O_RDONLY);
+	}
+	if (infile == -1)
+		perror_error("Error al abrir el archivo de entrada");
+	dup2(infile, STDIN_FILENO);
+	close(infile);
+	dup2(fd[1], STDOUT_FILENO);
+	close(fd[1]);
+	close(fd[0]);
+	ft_execve(arguments[i], enviroment);
 }
-void next_cmds(char **arg, char **env, int *pid, int *fd)
+void	next_cmds(char **arg, char **env, int *pid, int *fd)
 {
-    int fd2[2];
-    int ac;
-    int i;
+	int	fd2[2];
+	int	ac;
+	int	i;
 
-    i = 2;
-    ac = 0;
-    while (arg[ac])
-        ac++;
-    if (ft_strcmp(arg[1], "here_doc") == 0)
-        i++;
-    while (++i < (ac - 2))
-    {
-        if (pipe(fd2) == -1)
-            perror_error("Error al crear pipe");
-
-        *pid = fork();
-        if (*pid == -1)
-            perror_error("Error al crear proceso hijo");
-
-        if (*pid == 0)
-        {
-            other_childs(fd, fd2);
-            ft_execve(arg[i], env);  // Ejecuta el comando intermedio
-        }
-
-        close(fd2[1]); // Cierra el extremo de escritura en el padre
-        close(fd[0]);  // Cierra el extremo de lectura del antiguo fd en el padre
-        fd[0] = fd2[0]; // Actualiza fd para la siguiente iteración
-    }
-
-    parent_bonus(arg, env, pid, fd);
+	i = 2;
+	ac = 0;
+	while (arg[ac])
+		ac++;
+	if (ft_strcmp(arg[1], "here_doc") == 0)
+		i++;
+	while (++i < (ac - 2))
+	{
+		if (pipe(fd2) == -1)
+			perror_error("Error al crear pipe");
+		*pid = fork();
+		if (*pid == -1)
+			perror_error("Error al crear proceso hijo");
+		if (*pid == 0)
+		{
+			other_childs(fd, fd2);
+			ft_execve(arg[i], env);
+		}
+		close(fd2[1]);
+		close(fd[0]);  
+		fd[0] = fd2[0];
+	}
+	parent_bonus(arg, env, pid, fd);
 }
 
-
-void parent_bonus(char **arguments, char **enviroment, int *pid, int *fd)
+void	parent_bonus(char **arguments, char **enviroment, int *pid, int *fd)
 {
-    int outfile;
-    int ac;
+	int	outfile;
+	int	ac;
 
-    ac = 0;
-    while (arguments[ac])
-        ac++;
-    
-    close(fd[1]);  // Cierra la escritura del último pipe
-
-    *pid = fork();
-    if (*pid == -1)
-        perror_error("Error al crear proceso hijo");
-    if (*pid == 0)
-    {
-        if (ft_strcmp(arguments[1], "here_doc") == 0)
-            outfile = open(arguments[ac - 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
-        else
-            outfile = open(arguments[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-
-        if (outfile == -1)
-            perror_error("Error al abrir el archivo de salida");
-
-        dup2(fd[0], STDIN_FILENO);
-        close(fd[0]); // Cerramos después de duplicar
-
-        dup2(outfile, STDOUT_FILENO);
-        close(outfile); // Cerramos después de duplicar
-
-        ft_execve(arguments[ac - 2], enviroment);  // Ejecuta el último comando
-    }
-
-    close(fd[0]);  // Cierra la lectura del último pipe en el padre
-
+	ac = 0;
+	while (arguments[ac])
+		ac++;
+	close(fd[1]);
+	*pid = fork();
+	if (*pid == -1)
+		perror_error("Error al crear proceso hijo");
+	if (*pid == 0)
+	{
+		if (ft_strcmp(arguments[1], "here_doc") == 0)
+			outfile = open(arguments[ac - 1], O_WRONLY | O_CREAT | O_APPEND,
+					0644);
+		else
+			outfile = open(arguments[ac - 1], O_WRONLY | O_CREAT | O_TRUNC,
+					0644);
+		if (outfile == -1)
+			perror_error("Error al abrir el archivo de salida");
+		dup2(fd[0], STDIN_FILENO);
+		close(fd[0]);
+		dup2(outfile, STDOUT_FILENO);
+		close(outfile);
+		ft_execve(arguments[ac - 2], enviroment);
+	}
+	close(fd[0]);
 }
-

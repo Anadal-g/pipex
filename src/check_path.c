@@ -6,7 +6,7 @@
 /*   By: anadal-g <anadal-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 15:15:36 by anadal-g          #+#    #+#             */
-/*   Updated: 2024/09/04 13:55:36 by anadal-g         ###   ########.fr       */
+/*   Updated: 2024/09/05 10:35:55 by anadal-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,6 @@ char	*find_path(char *command, char **envp)
 	char	*path;
 	char	*part_path;
 
-	/* NOTE
-		- Si el comando tiene una barra --> es una ruta absoluta o relativa
-		- SI no hay barra --> buscamos en PATH
-	*/
 	if (ft_strchr(command, '/'))
 		return (command);
 	env = check_envp(envp);
@@ -76,7 +72,7 @@ void	ft_execve(char *argv, char **envp)
 	char	**command;
 
 	command = ft_split(argv, ' ');
-	if (command == NULL) // Error si hay fallo en la asgnacion de memoria
+	if (command == NULL)
 	{
 		perror_error("Error al dividir la cadena");
 		return ;

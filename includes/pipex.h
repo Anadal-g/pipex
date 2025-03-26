@@ -6,7 +6,7 @@
 /*   By: anadal-g <anadal-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 12:09:16 by anadal-g          #+#    #+#             */
-/*   Updated: 2024/09/04 17:43:21 by anadal-g         ###   ########.fr       */
+/*   Updated: 2024/09/09 15:36:20 by anadal-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 # include "../libft/includes/libft.h"
+
+# define TMP_FILE "/tmp/pipex_tmp"
 
 //Errores
 int	error(char *msg);
@@ -54,6 +56,8 @@ void next_cmds(char **arg, char **env, int *pid, int *fd);
 
 
 /* Here_doc */
+// void	here_doc(char **argv);
+
 void	here_doc(char **argv);
 
 

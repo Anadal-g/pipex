@@ -6,7 +6,7 @@
 /*   By: anadal-g <anadal-g@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 11:40:15 by anadal-g          #+#    #+#             */
-/*   Updated: 2024/09/04 17:43:26 by anadal-g         ###   ########.fr       */
+/*   Updated: 2024/09/05 16:25:33 by anadal-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ int	open_file(char *argv, int x)
 	int	file;
 
 	file = 0;
-	// Esto indica que el archivo se abre solo para lectura
 	if (x == 1)
 		file = open(argv, O_RDONLY);
 	if (x == 2)
@@ -41,17 +40,11 @@ int	ft_strcmp(const char *s1, const char *s2)
 	return (0);
 }
 
-int wait_childs_bonus(pid_t pid)
+int	wait_childs_bonus(pid_t pid)
 {
-    pid_t	waited;
+	pid_t	waited;
 	int		aux;
 	int		status;
-	
-
-    // waited = waitpid(pid, status, 0);
-    // if (waited == -1)
-    //     return -1; // Error al esperar al proceso hijo
-
 
 	while (1)
 	{
@@ -61,43 +54,54 @@ int wait_childs_bonus(pid_t pid)
 		if (waited == pid)
 			status = WEXITSTATUS(aux);
 	}
-    return (status);
+	return (status);
 }
 
-int main(int ac, char *av[], char *env[])
+
+/*
+ * Main bueno
+*/
+int	main(int ac, char *av[], char *env[])
 {
-    int fd[2];
-    int pid;
-    int final_status;
+	int	fd[2];
+	int	pid;
+	int	final_status;
 
-    final_status = 0;
-    if (ac >= 5)
-    {
-        if (ft_strcmp(av[1], "here_doc") == 0)
-            here_doc(av);
-
-        if (pipe(fd) == -1)
-            perror_error("Error al crear pipe");
-
-        pid = fork();
-        if (pid == -1)
-            perror_error("Error al crear proceso hijo");
-
-        if (pid == 0)
-            first_child(av, env, fd);
-        else
-            next_cmds(av, env, &pid, fd);
-		close(fd[0]);
-        close(fd[1]);
-        final_status = wait_childs_bonus(pid);
-        unlink("TMP_FILE");  // Elimina el archivo temporal si se usó here_doc
-    }
-    else
-    {
-        perror_error("Número insuficiente de argumentos");
-    }
-    return final_status;
+	final_status = 0;
+	if (ac >= 5)
+	{
+		if (ft_strcmp(av[1], "here_doc") == 0)
+		{
+			if (ac < 6)
+        	{
+           		ft_putstr_fd("Número insuficiente de argumentos para here_doc\n", 2);
+        		return (EXIT_FAILURE);
+        	}
+			here_doc(av);
+			if (pipe(fd) == -1)
+				perror_error("Error al crear pipe");
+			pid = fork();
+			if (pid == -1)
+				perror_error("Error al crear proceso hijo");
+			if (pid == 0)
+				first_child(av, env, fd);
+			else
+				next_cmds(av, env, &pid, fd);
+			close(fd[0]);
+			close(fd[1]);
+			final_status = wait_childs_bonus(pid);
+			unlink("TMP_FILE"); // Elimina el archivo temporal si se usó here_doc
+		}
+	}
+	else
+		perror_error("Número insuficiente de argumentos");
+	return (final_status);
 }
+
+
+/*
+ * Main antiguo
+*/
 
 // int	main (int argc, char **argv, char **envp)
 // {
